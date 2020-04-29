@@ -58,36 +58,49 @@ client.on('message', async message => {
 	}	
 
    if (message.content.startsWith(prefix + "çal ")) {
-        if (message.member.voice.channel) {
-            let url = message.content.replace(prefix+"çal ", "");
-            if (!validURL(url)) {
-                search(url, async function (err, res) {
-                    if (err) {
-                        message.channel.send("Bir şeyler yanlış gitti yeniden deneyin");
-                        console.log(err);
-                    }
-                    else if (res.videos && res.videos.length > 0) {
-                        let video = res.videos[0];
-                        const connection = await message.member.voice.channel.join();
-                        currentDispatcher = connection.play(ytdl(video.url, { filter: 'audioonly' }));
-                        message.channel.send(`${video.title} çalınıyor`);
-                    }
-                })
-            } else {
-                const connection = await message.member.voice.channel.join();
-                currentDispatcher = connection.play(ytdl(url, { filter: 'audioonly' }));
-            }
-        } else {
-            message.reply('Önce sesli kanala geçmelisiniz!');
-        }
+	   try {
+			if (message.member.voice.channel) {
+				let url = message.content.replace(prefix+"çal ", "");
+				if (!validURL(url)) {
+					search(url, async function (err, res) {
+						if (err) {
+							message.channel.send("Bir şeyler yanlış gitti yeniden deneyin");
+							console.log(err);
+						}
+						else if (res.videos && res.videos.length > 0) {
+							let video = res.videos[0];
+							const connection = await message.member.voice.channel.join();
+							currentDispatcher = connection.play(ytdl(video.url, { filter: 'audioonly' }));
+							message.channel.send(`${video.title} çalınıyor`);
+						}
+					})
+				} else {
+					const connection = await message.member.voice.channel.join();
+					currentDispatcher = connection.play(ytdl(url, { filter: 'audioonly' }));
+				}
+			} else {
+				message.reply('Önce sesli kanala geçmelisiniz!');
+			}
+		}
+		catch(err) {
+		  console.log("Müzik çalma hata");
+		  console.log(err);
+		  console.log(message);
+		}
     }
 
     if (message.content === prefix + "sus") {
-        if (currentDispatcher !== null) {
-            currentDispatcher.destroy();
-            currentDispatcher = null;
-            message.channel.send('Müzik geçildi');
-        }
+		try{
+			if (currentDispatcher !== null) {
+				currentDispatcher.destroy();
+				currentDispatcher = null;
+				message.channel.send('Müzik geçildi');
+			}
+		}catch(err){
+		  console.log("Müzik susturma hata");
+		  console.log(err);
+		  console.log(message);
+		}
     }
 	
 }
