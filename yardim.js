@@ -19,6 +19,9 @@ exports.run = function (client, message, arg) {
         + "**!çal** \n"
         + "Müzik listesine şarkı ekler ve oynatır. Link yada aradıgınız sarkı kelimelerini yazabilirsiniz\n\n"
 
+        + "**!sus** \n"
+        + "Listede müzik varsa diğerine geçer yoksa susturur\n\n"
+
         + "**!temizle [ADET]** \n"
         + "Belirtilen miktarda mesajı siler.\n\n";
 
